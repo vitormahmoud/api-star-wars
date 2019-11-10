@@ -92,7 +92,7 @@ router.get("/:planetId", async (req, res) => {
     const planet = await planetService.getPlanetById(planetId);
     if (planet) {
       return res.status(200).json({
-        result: planetService.checkPlanet(planet)
+        result: planet
       });
     } else {
       return res.status(404).json({

@@ -114,14 +114,6 @@ class PlanetService {
       };
     }
   }
-
-  checkPlanet(value) {
-    if (value) {
-      return value;
-    } else {
-      return "Planeta não encontrado";
-    }
-  }
 }
 
 module.exports = PlanetService;
