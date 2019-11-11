@@ -1,6 +1,6 @@
 ## API NODE JS / MONGODB
 	.npm install -> Instalar dependencias
-	.start -> Iniciar servidor
+	.npm start -> Iniciar servidor
 	.npm run test -> Rodar testes
 
 ## Routes STAR-WARS
