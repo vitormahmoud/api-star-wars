@@ -5,14 +5,15 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const planetService = new PlanetService();
   let all = await planetService.getAllPlanets();
-  all = all.map(item => {
-    return {
-      PLANET_ID: item.PLANET_ID,
-      NAME: item.NAME,
-      CLIMATE: item.CLIMATE,
-      TERRAIN: item.TERRAIN
-    };
-  });
+
+  for (let index = 0; index < all.length; index++) {
+    try {
+      const aparicoes = await planetService.getQtdAparicoes(all[index].NAME);
+      all[index].QTD_FILMS = aparicoes.qtd;
+    } catch (e) {
+      all[index].QTD_FILMS = 0;
+    }
+  }
   return res.status(200).json(all);
 });
 
@@ -58,39 +59,24 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/planetByName", async (req, res) => {
-  const { name } = req.body;
+router.get("/:search", async (req, res) => {
+  const search = req.params.search;
 
-  const planetService = new PlanetService();
-  if (!name) return res.status(400).json("Bad request");
-  try {
-    const planet = await planetService.getPlanetByName(name);
-    if (planet) {
-      const aparicoes = await planetService.getQtdAparicoes(name);
-      return res
-        .status(200)
-        .json({ result: planet, filmsQuantity: aparicoes.qtd });
-    } else {
-      return res.status(404).json({
-        result: "Nenhum planeta encontrado"
-      });
-    }
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      result: "Erro ao pesquisar planeta"
-    });
-  }
-});
-
-router.get("/:planetId", async (req, res) => {
-  const planetId = req.params.planetId;
-
-  if (!planetId) return res.status(400).json("Bad request");
+  if (!search) return res.status(400).json("Bad request");
   try {
     const planetService = new PlanetService();
-    const planet = await planetService.getPlanetById(planetId);
+    let planet;
+
+    if (await planetService.isNumeric(search)) {
+      planet = await planetService.getPlanetById(search);
+    } else {
+      planet = await planetService.getPlanetByName(search);
+    }
+
     if (planet) {
+      const aparicoes = await planetService.getQtdAparicoes(planet.NAME);
+      planet.QTD_FILMS = aparicoes.qtd;
+
       return res.status(200).json({
         result: planet
       });

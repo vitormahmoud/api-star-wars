@@ -23,21 +23,9 @@ describe("Get Endpoints", () => {
     done();
   });
 
-  it("GET ID error", async done => {
-    connector.connect().then(async () => {
-      const res = await request(app).get(`${API_BASE_URL}aaa`);
-      expect(res.statusCode).toEqual(200);
-      expect(res.result.PLANET_ID).toEqual(12);
-    });
-    connector.disconnect();
-    done();
-  });
-
   it("GET NAME", async done => {
     connector.connect().then(async () => {
-      const res = await request(app).get(
-        `${API_BASE_URL}planetByName/Alderaan`
-      );
+      const res = await request(app).get(`${API_BASE_URL}Alderaan`);
       expect(res.statusCode).toEqual(200);
       expect(res.result.PLANET_ID).toEqual(12);
     });
@@ -65,4 +53,21 @@ describe("Delete Endpoints", () => {
   });
 });
 
-// describe("Post Endpoints", () => {});
+describe("Post Endpoints", () => {
+  it("Insert planet", async done => {
+    connector.connect().then(async () => {
+      const res = await request(app)
+        .post(`${API_BASE_URL}`)
+        .send({
+          PLANET_ID: "0",
+          NAME: "Alderaan",
+          CLIMATE: "TEST",
+          TERRAIN: "TEST",
+          QTD_FILMS: 0
+        });
+      expect(res.statusCode).toEqual(200);
+    });
+    connector.disconnect();
+    done();
+  });
+});

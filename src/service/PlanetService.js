@@ -28,7 +28,8 @@ class PlanetService {
       PLANET_ID: id.toString(),
       NAME: name,
       CLIMATE: climate,
-      TERRAIN: terrain
+      TERRAIN: terrain,
+      QTD_FILMS: 0
     });
     try {
       await this.planetRepository.insertOne(pl);
@@ -113,6 +114,11 @@ class PlanetService {
         qtd: 0
       };
     }
+  }
+
+  async isNumeric(str) {
+    var er = /^[0-9]+$/;
+    return er.test(str);
   }
 }
 

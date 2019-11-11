@@ -4,6 +4,7 @@ class Planet {
     this.NAME = planet.NAME;
     this.CLIMATE = planet.CLIMATE;
     this.TERRAIN = planet.TERRAIN;
+    this.QTD_FILMS = planet.QTD_FILMS;
   }
 }
 module.exports = Planet;
